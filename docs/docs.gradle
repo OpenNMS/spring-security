@@ -10,7 +10,6 @@ task docs {
 project('manual') {
 	apply plugin: 'base'
 	apply plugin: 'org.asciidoctor.gradle.asciidoctor'
-	apply plugin: 'docbook-reference'
 
 	ext.expandPlaceholders = ""
 

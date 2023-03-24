@@ -14,10 +14,9 @@ buildscript {
 		classpath "com.github.ben-manes:gradle-versions-plugin:0.17.0"
 		classpath("org.springframework.build.gradle:propdeps-plugin:0.0.7")
 		classpath("io.spring.gradle:spring-io-plugin:0.0.8.RELEASE")
-		classpath("com.bmuschko:gradle-tomcat-plugin:2.2.4")
+		classpath("com.bmuschko:gradle-tomcat-plugin:2.5")
 		classpath('me.champeau.gradle:gradle-javadoc-hotfix-plugin:0.1')
 		classpath('org.asciidoctor:asciidoctor-gradle-plugin:1.5.7')
-		classpath("io.spring.gradle:docbook-reference-plugin:0.3.1")
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.22.RELEASE")
 		classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.12.0"
 		classpath 'org.hidetake:gradle-ssh-plugin:2.10.1'
@@ -71,11 +70,9 @@ sonarqube {
 
 // Set up different subproject lists for individual configuration
 ext.javaProjects = subprojects.findAll { project -> project.name != 'docs' && project.name != 'manual' && project.name != 'guides' && project.name != 'spring-security-bom' }
-ext.sampleProjects = subprojects.findAll { project -> project.name.startsWith('spring-security-samples') }
-ext.sampleBootProjects = subprojects.findAll { project -> project.name.startsWith('spring-security-samples-boot') }
 ext.itestProjects = subprojects.findAll { project -> project.name.startsWith('itest') }
-ext.coreModuleProjects = javaProjects - sampleProjects - itestProjects
-ext.aspectjProjects = [project(':spring-security-aspects'), project(':spring-security-samples-xml-aspectj'), project(':spring-security-samples-javaconfig-aspectj')]
+ext.coreModuleProjects = javaProjects - itestProjects
+ext.aspectjProjects = [project(':spring-security-aspects')]
 
 configure(allprojects - javaProjects) {
 	task afterEclipseImport {
@@ -96,7 +93,7 @@ configure(allprojects - javaProjects) {
 	}
 }
 
-configure(subprojects - coreModuleProjects - project(':spring-security-samples-javaconfig-messages') - project(':spring-security-bom')) {
+configure(subprojects - coreModuleProjects - project(':spring-security-bom')) {
 	sonarqube {
 		skipProject = true
 	}
@@ -104,8 +101,6 @@ configure(subprojects - coreModuleProjects - project(':spring-security-samples-j
 
 configure(javaProjects) {
 	ext.TOMCAT_GRADLE = "$rootDir/gradle/tomcat.gradle"
-	ext.WAR_SAMPLE_GRADLE = "$rootDir/gradle/war-sample.gradle"
-	ext.BOOT_SAMPLE_GRADLE = "$rootDir/gradle/boot-sample.gradle"
 	apply from: "$rootDir/gradle/javaprojects.gradle"
 	if(!project.name.contains('gae')) {
 		apply from: "$rootDir/gradle/checkstyle.gradle"
@@ -173,19 +168,11 @@ task dist(type: Zip) {
 	dependsOn { subprojects*.tasks*.matching { task -> task.name.endsWith('generatePom') } }
 	classifier = 'dist'
 
-	evaluationDependsOn(':docs')
-	evaluationDependsOn(':docs:manual')
-
 	def zipRootDir = "${project.name}-$version"
 	into(zipRootDir) {
 		from(rootDir) {
 			include '*.adoc'
 			include '*.txt'
-		}
-		into('docs') {
-			with(project(':docs').apiSpec)
-			with(project(':docs:manual').spec)
-			with(project(':docs:guides').spec)
 		}
 		project.coreModuleProjects*.tasks*.withType(AbstractArchiveTask).flatten().each{ archiveTask ->
 			if(archiveTask!=dist){
@@ -194,21 +181,11 @@ task dist(type: Zip) {
 				}
 			}
 		}
-		sampleProjects.each { project->
-			into("$zipRootDir/samples/$project.name") {
-				from(project.projectDir) {
-					include "src/main/**"
-					include "pom.xml"
-				}
-			}
-		}
 	}
 }
 
 artifacts {
 	archives dist
-	archives project(':docs').docsZip
-	archives project(':docs').schemaZip
 }
 
 
