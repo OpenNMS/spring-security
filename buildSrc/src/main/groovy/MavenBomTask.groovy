@@ -34,11 +34,11 @@ public class MavenBomTask extends DefaultTask {
 			}
 		}
 
-		project.uploadArchives {
-			repositories.mavenDeployer {
-				customizePom(pom)
-			}
-		}
+//		project.uploadArchives {
+//			repositories.mavenDeployer {
+//				customizePom(pom)
+//			}
+//		}
 	}
 
 	public void customizePom(pom) {

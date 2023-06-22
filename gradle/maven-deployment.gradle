@@ -25,11 +25,11 @@ install {
 	}
 }
 
-uploadArchives {
-	repositories.mavenDeployer {
-		customizePom(pom, project)
-	}
-}
+//uploadArchives {
+//	repositories.mavenDeployer {
+//		customizePom(pom, project)
+//	}
+//}
 
 def customizePom(pom, gradleProject) {
 	pom.whenConfigured { p ->
