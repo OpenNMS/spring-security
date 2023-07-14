@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.servicemix.bundles</groupId>
+    <artifactId>bundles-pom</artifactId>
+    <version>15</version>
+  </parent>
+
+  <groupId>org.opennms</groupId>
+  <artifactId>org.opennms.servicemix</artifactId>
+  <version>3</version>
+  <packaging>pom</packaging>
+  <name>OpenNMS Servicemix Bundles</name>
+  <properties>
+    <opennms.spring-security.suffix>_ONMS_3</opennms.spring-security.suffix>
+  </properties>
+  <modules>
+    <module>spring-security-acl</module>
+    <module>spring-security-config</module>
+    <module>spring-security-core</module>
+    <module>spring-security-kerberos-core</module>
+    <module>spring-security-kerberos-client</module>
+    <module>spring-security-kerberos-web</module>
+    <module>spring-security-ldap</module>
+    <module>spring-security-messaging</module>
+    <module>spring-security-openid</module>
+    <module>spring-security-remoting</module>
+    <module>spring-security-taglibs</module>
+    <module>spring-security-web</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>opennms-repo</id>
+      <name>OpenNMS Mega-Repository</name>
+      <url>https://maven.opennms.org/repository/everything/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+</project>
