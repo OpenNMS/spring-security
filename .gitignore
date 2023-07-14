@@ -17,9 +17,11 @@ build/
 *.iml
 *.ipr
 *.iws
+.*.swp
 .gradle/
 atlassian-ide-plugin.xml
 !etc/eclipse/.checkstyle
 .checkstyle
 classes/
 s101plugin.state
+dependency-reduced-pom.xml
